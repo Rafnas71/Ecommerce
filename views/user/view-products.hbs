@@ -1,0 +1,16 @@
+
+  <div class="row m-4">
+    {{#each products}}
+    <div class="col-md-3 p-1">
+        <div class="card float-left " style="width: 12rem;height:20rem">
+            <img style= "height:10rem;" class="card-img-top" src="images/product-images/{{this._id}}.jpg" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">{{this.Name}}</h5>
+            <p class="card-text" style="width: 12rem;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{this.Description}}</p>
+            <a href="#" class="btn btn-primary">Add to cart</a>
+        </div>
+        </div>
+    </div>    
+  {{/each}}
+</div>
+    
