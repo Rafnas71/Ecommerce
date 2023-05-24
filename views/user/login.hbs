@@ -4,6 +4,10 @@
             <h2 class="text-center">Login</h2>
             <form action="/login" method="post" enctype="application/x-www-form-urlencoded">
             <div class="form-group">
+                {{#if logInErr}}
+                <p style="color: red;">{{logInErr}}</p>
+
+                {{/if}}
                 <label>Email Address</label>
                 <input type="email" class="form-control" name="Email" placeholder="Enter Email">
             </div>

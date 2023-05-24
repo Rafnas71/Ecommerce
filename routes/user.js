@@ -13,8 +13,14 @@ router.get("/", function (req, res, next) {
   });
 });
 
+/* GET login page */
 router.get("/login", (req, res) => {
-  res.render("user/login");
+  if(req.session.loggedIn){
+    res.redirect("/")
+  }else {
+    res.render("user/login",{"logInErr":req.session.logInErr});
+    req.session.logInErr= false;
+  }
 });
 
 router.get("/signup", (req, res) => {
@@ -35,6 +41,7 @@ router.post("/login", (req, res) => {
       req.session.user = response.user;
       res.redirect("/");
     } else {
+      req.session.logInErr = "Incorrect Username or Password";
       res.redirect("/login");
     }
   });
