@@ -7,12 +7,10 @@ var productHelpers = require("../helpers/product-helpers");
 router.get("/", function (req, res, next) {
   console.log("Handling admin route");
   productHelpers.getAllProducts().then((products)=>{
-    console.log(products);
     res.render("admin/view-products", { admin: true, products});
-  })
-  }
-  
-);
+  });
+});
+
 
 /* GET add product page. */
 router.get("/add-product", (req, res) => {
@@ -22,6 +20,7 @@ router.get("/add-product", (req, res) => {
 /* POST add product page. */
 router.post("/add-product", (req, res) => {
   console.log(req.body);
+  console.log(req.files.Image);
   console.log("Add product post req");
 
   if (req.files && req.files.Image) {
@@ -37,6 +36,14 @@ router.post("/add-product", (req, res) => {
           console.log(err)
         }
 })
-});
+});   
 }})
+
+router.get('/delete-product/:id',(req,res)=>{
+  let productId = req.params.id;
+  console.log(productId)
+  productHelpers.deleteProduct(productId);
+  res.redirect("/admin")
+})
+
 module.exports = router;

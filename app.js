@@ -3,7 +3,6 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-
 var userRouter = require("./routes/user");
 var adminRouter = require("./routes/admin");
 var hbs =  require('express-handlebars')
@@ -12,6 +11,7 @@ var fileUpload = require("express-fileupload")
 var db = require ('./config/connection')
 var session = require("express-session")
 // view engine setup
+app.use(fileUpload())
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 app.engine(
@@ -23,12 +23,14 @@ app.engine(
     partialsDir: __dirname + "/views/partials/",
   })
 );
+
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(fileUpload())
+
 app.use(session({secret:"secret",cookie:{maxAge:6000000}}))
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
@@ -53,4 +55,9 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
+// Register the helper function
+const Handlebars = require('handlebars');
+Handlebars.registerHelper('addOne', function(index) {
+  return index + 1;
+});
 module.exports = app;
