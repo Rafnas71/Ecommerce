@@ -1,16 +1,22 @@
-
-  <div class="row m-4 >
-    {{#each products}}
-    <div class="col-md-3 pl-6 pr-6 pr-4 p-2" style="width: 13rem; height: 13rem;" >
-        <div class="card float-left"  > 
-            <img style= "width:6rem;height:7rem; " class="card-img-top p-2 m-auto" src="images/product-images/{{this._id}}.jpg" alt="Card image cap">
+<div class="row m-4 p-1">
+  {{#each products}}
+    <div class="col-md-2 pl-2 pr-2 pb-2 ">
+      <div class="card m-auto" style="width: 11rem; height: 15rem;">
+        <img
+          style="width: 6rem; height: 6rem;"
+          class="card-img-top p-2 m-auto"
+          src="images/product-images/{{this._id}}.jpg"
+          alt="Card image cap"
+        />
         <div class="card-body">
-            <h5 class="card-title">{{this.Name}}</h5>
-            <p class="card-text" style="width: 11rem;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{this.Description}}</p>
-            <a href="" class="btn btn-primary">Add to cart</a>
+          <h6
+            class="card-title"
+            style="width: 11rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+          >{{this.Name}}</h6>
+          <p class="card-text " style="font-size:.8rem;width: 11rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{this.Description}}</p>
+          <a href="" class="btn btn-primary">Add to cart</a>
         </div>
-        </div>
-    </div>    
+      </div>
+    </div>
   {{/each}}
 </div>
-    

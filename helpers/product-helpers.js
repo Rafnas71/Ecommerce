@@ -1,6 +1,6 @@
 var db = require("../config/connection");
 var collection = require("../config/collections");
-const { ObjectId } = require('mongodb');
+const { ObjectId } = require("mongodb");
 
 module.exports = {
   addProduct: (product, callback) => {
@@ -17,6 +17,7 @@ module.exports = {
         callback(null, error);
       });
   },
+
   getAllProducts: () => {
     return new Promise(async (resolve, reject) => {
       let products = await db
@@ -27,14 +28,47 @@ module.exports = {
       resolve(products);
     });
   },
+
   deleteProduct: (productId) => {
     return new Promise((resolve, reject) => {
       db.get()
         .collection(collection.PRODUCT_COLLECTION)
-        .deleteOne({ _id: new ObjectId(productId)})
+        .deleteOne({ _id: new ObjectId(productId) })
         .then((response) => {
           console.log(response);
           resolve(response);
+        });
+    });
+  },
+
+  getProductDetails: (id) => {
+    return new Promise((resolve, reject) => {
+      db.get()
+        .collection(collection.PRODUCT_COLLECTION)
+        .findOne({ _id: new ObjectId(id) })
+        .then((product) => {
+          resolve(product);
+        });
+    });
+  },
+
+  updateProduct: (id, product) => {
+    return new Promise((resolve, reject) => {
+      db.get()
+        .collection(collection.PRODUCT_COLLECTION)
+        .updateOne(
+          { _id: new ObjectId(id) },
+          {
+            $set: {
+              Name: product.Name,
+              Price: product.Price,
+              Description: product.Category,
+              Description: product.Description,
+            },
+          }
+        )
+        .then((response) => {
+          resolve();
         });
     });
   },
