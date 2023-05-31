@@ -4,7 +4,9 @@ var bcrypt = require("bcrypt");
 const { USER_COLLECTION } = require("../config/collections");
 
 module.exports = {
+  
   doSignUp: (userData) => {
+    let response = {};
     return new Promise(async (resolve, reject) => {
       userData.Password = await bcrypt.hash(userData.Password, 10);
       console.log(userData);
@@ -12,15 +14,24 @@ module.exports = {
         .collection(collection.USER_COLLECTION)
         .insertOne(userData)
         .then((data) => {
-          resolve(data);
-        });
+          let insertedId = data.insertedId;
+          db.get()
+            .collection(collection.USER_COLLECTION)
+            .findOne({ _id: insertedId })
+            .then((user) => {
+              console.log("find user"+user);
+              resolve(user);
+            })
+            
+        })
+        
     });
   },
 
   doLogin: (userData) => {
     let response = {};
     return new Promise(async (resolve, reject) => {
-      console.log("user");
+      console.log("user auth");
       let user = await db
         .get()
         .collection(collection.USER_COLLECTION)
