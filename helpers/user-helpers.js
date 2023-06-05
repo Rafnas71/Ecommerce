@@ -60,13 +60,13 @@ module.exports = {
       let userCart = await db
         .get()
         .collection(collections.CART_COLLECTION)
-        .findOne({ user: userId });
+        .findOne({ user: new ObjectId(userId) });
 
       if (userCart) {
         db.get()
           .collection(collections.CART_COLLECTION)
           .updateOne(
-            { user: userId },
+            { user: new ObjectId(userId) },
             {
               $push: { products: new ObjectId(proId) },
             }
@@ -76,7 +76,7 @@ module.exports = {
           });
       } else {
         let cartObj = {
-          user: userId,
+          user: new ObjectId(userId),
           products: [new ObjectId(proId)],
         };
         db.get()
@@ -86,6 +86,37 @@ module.exports = {
             resolve();
           });
       }
+    });
+  },
+  getCartProducts: (userId) => {
+    console.log("getcart" + userId);
+    return new Promise(async (resolve, reject) => {
+      let cartItems = await db
+        .get()
+        .collection(collection.CART_COLLECTION)
+        .aggregate([
+          {
+            $match: { user: new ObjectId(userId) },
+          },
+          {
+            $lookup: {
+              from: collection.PRODUCT_COLLECTION,
+              let: { prodList: "$products" },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $in: ["$_id", "$$prodList"],
+                    },
+                  },
+                },
+              ],
+              as: "cartItems",
+            },
+          },
+        ])
+        .toArray();
+        resolve(cartItems[0].cartItems)
     });
   },
 };
