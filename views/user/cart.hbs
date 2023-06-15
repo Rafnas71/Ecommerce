@@ -1,1 +1,41 @@
-<h2 class="text-center">Hey this is cart</h2>
+<section>
+  <div class="container">
+    <div class="row">
+      <table class="table mt-3">
+        <thead>
+          <tr>
+            <th scope="col">No.</th>
+            <th scope="col">Item</th>
+            <th scope="col">Title</th>
+            <th scope="col">Quantity</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each cartProducts}}
+            <tr>
+              <th scope="row">1</th>
+              {{#each this.products}}
+                <td><img
+                    style="width:60px;height:60px"
+                    src="images/product-images/{{this._id}}.jpg"
+                  /></td>
+                <td>{{this.Name}}</td>
+              {{/each}}
+              <td><button
+                  class="cart-item-counter m-3"
+                  onclick="changeQuantity('{{this._id}}','{{this.proId}}',-1)"
+                >-</button>{{this.quantity}}<button
+                  class="cart-item-counter m-3"
+                  onclick="changeQuantity('{{this._id}}','{{this.proId}}',1)"
+                >+</button><button
+                  class="btn btn-rounded btn-danger"
+                >Remove</button></td>
+
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

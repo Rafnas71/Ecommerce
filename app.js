@@ -10,7 +10,10 @@ var app = express();
 var fileUpload = require("express-fileupload")
 var db = require ('./config/connection')
 var session = require("express-session")
+var bodyParser= require('body-parser')
+
 // view engine setup
+
 app.use(fileUpload())
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
@@ -29,6 +32,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(session({secret:"secret",cookie:{maxAge:6000000}}))

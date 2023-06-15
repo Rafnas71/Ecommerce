@@ -49,7 +49,7 @@ router.get('/delete-product/:id',(req,res)=>{
 router.get('/edit-product/:id',async(req,res)=>{
   console.log("edit id"+ req.params.id)
   let product =await productHelpers.getProductDetails(req.params.id).then((product)=>{
-    ///console.log(product);
+    
     res.render("admin/edit-product",{ admin:true, product});
   })
 });

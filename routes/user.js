@@ -11,12 +11,20 @@ const verifyLogIn = (req, res, next) => {
     res.redirect("/login");
   }
 };
+let cartCount = (req, res, next) => {
+  userHelpers.getCartCount(req.session.user._id);
+};
 /* GET home page. */
-router.get("/", function (req, res, next) {
+router.get("/", async function (req, res, next) {
   let user = req.session.user;
-  console.log("Homepage" + user);
+  console.log("Homepage");
+  let cartCount = null;
+  if (req.session.user) {
+    cartCount = await userHelpers.getCartCount(user._id);
+  }
+
   productHelpers.getAllProducts().then((products) => {
-    res.render("user/view-products", { products, user });
+    res.render("user/view-products", { products, user, cartCount });
   });
 });
 
@@ -32,7 +40,7 @@ router.get("/login", (req, res) => {
 
 router.post("/login", (req, res) => {
   userHelpers.doLogin(req.body).then((response) => {
-    console.log(response)
+    console.log(response);
     if (response.status) {
       req.session.loggedIn = true;
       req.session.user = response.user;
@@ -63,16 +71,40 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-router.get("/cart", verifyLogIn, async(req, res) => {
-  let cartProducts=await userHelpers.getCartProducts(req.session.user._id)
+router.get("/cart", verifyLogIn, async (req, res) => {
+  let user = req.session.user;
+
+  let cartCount = null;
+  if (req.session.user) {
+    cartCount = await userHelpers.getCartCount(req.session.user._id);
+  }
+
+  let cartProducts = await userHelpers.getCartProducts(req.session.user._id);
   console.log(cartProducts);
-  res.render("user/cart",{cartProducts});
+  console.log(cartProducts[0].products);
+  res.render("user/cart", { cartProducts, user, cartCount });
 });
 
-router.get("/add-to-cart/:id", verifyLogIn , (req,res)=>{
-  console.log("addcart user"+req.session.user._id);
-  userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
-    res.redirect('/')
+router.get("/add-to-cart/:id", verifyLogIn, (req, res) => {
+  if (req.session.user) {
+    console.log("ajax call");
+    console.log("addcart user");
+    console.log(req.params.id);
+    userHelpers.addToCart(req.params.id, req.session.user._id).then(() => {
+      res.json({ status: true });
+    });
+  } else {
+    res.redirect("/login");
+  }
+});
+
+//Change Quantity in cart
+router.post("/change-quantity",(req,res,next)=>{
+  console.log("ajax quantity");
+  console.log(req.body)
+  userHelpers.updateQuantity(req.body).then((response)=>{
+
   })
 })
+
 module.exports = router;
