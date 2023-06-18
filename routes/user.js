@@ -71,7 +71,7 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-router.get("/cart", verifyLogIn, async (req, res) => {
+router.get("/cart",verifyLogIn, async (req, res) => {
   let user = req.session.user;
 
   let cartCount = null;
@@ -81,7 +81,7 @@ router.get("/cart", verifyLogIn, async (req, res) => {
 
   let cartProducts = await userHelpers.getCartProducts(req.session.user._id);
   console.log(cartProducts);
-  console.log(cartProducts[0].products);
+  // console.log(cartProducts[0].products);
   res.render("user/cart", { cartProducts, user, cartCount });
 });
 
@@ -103,8 +103,22 @@ router.post("/change-quantity",(req,res,next)=>{
   console.log("ajax quantity");
   console.log(req.body)
   userHelpers.updateQuantity(req.body).then((response)=>{
-
+    res.json(response)
   })
+});
+
+router.post("/remove-cart-product",(req,res,next)=>{
+  console.log("remove api call");
+  userHelpers.removeCartProduct(req.body).then((response)=>{
+    res.json(response)
+    console.log("removed");
+  })
+})
+
+router.get("/place-order",verifyLogIn,async(req,res,next)=>{
+  let total=await userHelpers.getTotalPrice(req.session.user._id)
+  console.log(total);
+  res.render("user/place-order",{total})
 })
 
 module.exports = router;

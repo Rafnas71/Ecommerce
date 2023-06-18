@@ -7,35 +7,41 @@
             <th scope="col">No.</th>
             <th scope="col">Item</th>
             <th scope="col">Title</th>
+            <th scope="col">Price</th>
             <th scope="col">Quantity</th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
           {{#each cartProducts}}
-            <tr>
-              <th scope="row">1</th>
-              {{#each this.products}}
-                <td><img
-                    style="width:60px;height:60px"
-                    src="images/product-images/{{this._id}}.jpg"
-                  /></td>
-                <td>{{this.Name}}</td>
-              {{/each}}
-              <td><button
-                  class="cart-item-counter m-3"
-                  onclick="changeQuantity('{{this._id}}','{{this.proId}}',-1)"
-                >-</button>{{this.quantity}}<button
-                  class="cart-item-counter m-3"
-                  onclick="changeQuantity('{{this._id}}','{{this.proId}}',1)"
-                >+</button><button
-                  class="btn btn-rounded btn-danger"
-                >Remove</button></td>
+          <tr>
+            <th scope="row">{{addOne @index}}</th>
 
-            </tr>
+            <td><img style="width:50px;height:50px" src="images/product-images/{{this.product._id}}.jpg" /></td>
+            <td class="m-auto">{{this.product.Name}}</td>
+            <td class="m-auto">{{this.product.Price}}</td>
+
+            <td><button class="cart-item-counter m-3"
+                onclick="changeQuantity('{{this._id}}','{{this.proId}}',-1)">-</button>
+              <span id="{{this.proId}}">{{this.quantity}}</span>
+              <button class="cart-item-counter m-3"
+                onclick="changeQuantity('{{this._id}}','{{this.proId}}','{{this.quantity}}',1)">+</button><button
+                class="btn btn-rounded btn-danger"
+                onclick="removeCartProduct('{{this._id}}','{{this.proId}}')">Remove</button>
+            </td>
+
+          </tr>
           {{/each}}
         </tbody>
       </table>
+
     </div>
+    <hr style="height:2px;border-width:0;color:gray;background-color:gray " />
+    <div class="float-right mr-4">
+      <h3>Total : 23456</h3>
+      <a href="/place-order" class="btn btn-primary"><b>Place Order</b><a />
+    </div>
+
   </div>
+
 </section>
