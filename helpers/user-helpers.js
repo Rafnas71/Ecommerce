@@ -223,7 +223,7 @@ module.exports = {
           )
           .then(() => {
             console.log("product  quantity updated");
-            resolve(true);
+            resolve({ status: true });
           });
       }
     });
@@ -246,8 +246,9 @@ module.exports = {
     });
   },
 
-  getTotalPrice: (userId) => {
+  getTotalPrice: (user) => {
     return new Promise(async (resolve, reject) => {
+      let userId = user.toString();
       let total = await db
         .get()
         .collection(collection.CART_COLLECTION)
@@ -281,15 +282,70 @@ module.exports = {
             },
           },
           {
-            $group:{
-              _id:null,
-              total:{$sum:{$multiply:[{ $toDouble: '$quantity' },
-              { $toDouble: '$product.Price' }]}}
-            }
-          }
+            $group: {
+              _id: null,
+              total: {
+                $sum: {
+                  $multiply: [
+                    { $toDouble: "$quantity" },
+                    { $toDouble: "$product.Price" },
+                  ],
+                },
+              },
+            },
+          },
         ])
         .toArray();
-        resolve(total[0].total)
+      if (total[0] != null) {
+        resolve(total[0].total);
+      } else {
+        resolve();
+      }
     });
   },
+
+  placeOrder: (order, products, total) => {
+    return new Promise((resolve, reject) => {
+      let status = order.Payment === "COD" ? "placed" : "pending";
+      let orderObj = {
+        deliveryDetails: {
+          address: order.Address,
+          mobile: order.Mobile,
+          pincode: order.Pincode,
+        },
+        userId: new ObjectId(order.userId),
+        paymentMethod: order.Payment,
+        products: products,
+        total: total,
+        status: status,
+        date:new Date()
+      };
+      db.get()
+        .collection(collection.ORDER_COLLECTION)
+        .insertOne(orderObj)
+        .then((response) => {
+          db.get()
+            .collection(collections.CART_COLLECTION)
+            .deleteOne({ userId: new ObjectId(order.userId) });
+          resolve({ placed: true });
+        });
+    });
+  },
+
+  getUserOrders: async (userId) => {
+    console.log("userId getOrders");    
+    return new Promise(async(resolve, reject) => {
+      try {
+        console.log(userId)       
+        let orders = await db
+          .get()
+          .collection(collections.ORDER_COLLECTION)
+          .find({userId:new ObjectId(userId)})
+          .toArray();
+        resolve(orders);        
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 };

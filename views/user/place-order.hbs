@@ -2,9 +2,9 @@
 
   <div>
     <h3 class="m-auto text-center">Enter Delivery Details</h3>
-    <form method="post" action="/place-order" method="post">
+    <form method="post" action="" method="post" id="checkout-form">
       <div class="col-md-6 float-left">
-
+        <input type="text" name="userId" value="{{user._id}}" hidden>
         <div class="form-group col-md-9">
           <label>Address</label>
           <input
@@ -25,6 +25,7 @@
             maxlength="6"
           />
         </div>
+        
         <div class="form-group col-md-9">
           <label>Mobile</label>
           <input
@@ -35,6 +36,8 @@
             maxlength="10"
           />
         </div>
+        
+
 
       </div>
       <div class="col-md-6 float-left">
@@ -45,14 +48,14 @@
           <br />
           <P><b>Payment Methods</b></P>
           <div class="form-check m-2">
-            <input class="form-check-input" type="radio" name="Payment" />
-            <label class="form-check-label" for="Online Payment">
+            <input class="form-check-input" name="Payment" value="Online Payment" type="radio" >
+            <label class="form-check-label">
               Online payment
             </label>
           </div>
           <div class="form-check m-2">
-            <input class="form-check-input" type="radio" name="Payment" />
-            <label class="form-check-label" for="Cod">
+            <input class="form-check-input" name="Payment" value="COD" type="radio"  />
+            <label class="form-check-label" >
               Cash on delivery
             </label>
           </div>
@@ -63,7 +66,7 @@
           <button
             type="Submit"
             class="btn btn-primary form-control col-md-9"
-          >Checkout</button>
+          >Checkout</i></button>
         </div>
 
       </div>
@@ -71,3 +74,20 @@
   </div>
 
 </section>
+
+<script>
+  $("#checkout-form").submit((e)=>{ 
+    e.preventDefault()
+    $.ajax({
+      url:'/place-order',
+      method:'post',
+      data:$("#checkout-form").serialize(),
+      success:(response)=>{
+        console.log("ajax respponse")
+        if(response.placed){
+          location.href='/order-success'
+        }
+      }
+    })
+  })
+</script>

@@ -22,10 +22,10 @@
             <td class="m-auto">{{this.product.Price}}</td>
 
             <td><button class="cart-item-counter m-3"
-                onclick="changeQuantity('{{this._id}}','{{this.proId}}',-1)">-</button>
+                onclick="changeQuantity('{{this._id}}','{{this.proId}}',-1,'{{../user._id}}')">-</button>
               <span id="{{this.proId}}">{{this.quantity}}</span>
               <button class="cart-item-counter m-3"
-                onclick="changeQuantity('{{this._id}}','{{this.proId}}','{{this.quantity}}',1)">+</button><button
+                onclick="changeQuantity('{{this._id}}','{{this.proId}}',1,'{{../user._id}}')">+</button><button
                 class="btn btn-rounded btn-danger"
                 onclick="removeCartProduct('{{this._id}}','{{this.proId}}')">Remove</button>
             </td>
@@ -38,7 +38,7 @@
     </div>
     <hr style="height:2px;border-width:0;color:gray;background-color:gray " />
     <div class="float-right mr-4">
-      <h3>Total : 23456</h3>
+      <h3>Total :<span id="total">{{total}}<span/></h3>
       <a href="/place-order" class="btn btn-primary"><b>Place Order</b><a />
     </div>
 

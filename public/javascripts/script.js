@@ -16,9 +16,9 @@ function addToCart(proId) {
   });
 }
 
-function changeQuantity(cartId, proId, count) {
+function changeQuantity(cartId, proId, count, userId) {
+  console.log("change quantity call");
   let quantity = parseInt(document.getElementById(proId).innerHTML);
-  console.log(quantity);
   $.ajax({
     url: "/change-quantity",
     data: {
@@ -26,6 +26,7 @@ function changeQuantity(cartId, proId, count) {
       proId: proId,
       count: count,
       quantity: quantity,
+      userId: userId,
     },
     method: "post",
     success: (response) => {
@@ -34,6 +35,7 @@ function changeQuantity(cartId, proId, count) {
         location.reload();
       } else {
         document.getElementById(proId).innerHTML = quantity + parseInt(count);
+        document.getElementById("total").innerHTML = response.total;
       }
     },
   });

@@ -1,6 +1,10 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrapicons@1.3.0/font/bootstrap-icons.css"
+/>
 <div class="row m-4 p-1">
   {{#each products}}
-    <div class="col-md-2 pl-2 pr-2 pb-2 ">
+    <div class="col-md-2 pl-2 pr-2 pb-2">
       <div class="card m-auto" style="width: 11rem; height: 15rem;">
         <img
           style="width: 5rem; height: 5rem;"
@@ -13,10 +17,16 @@
             class="card-title"
             style="width: 11rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
           >{{this.Name}}</h6>
-          <p class="card-text " style="font-size:.8rem;width: 11rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{this.Description}}</p>
+          <p
+            class="card-text"
+            style="font-size:.8rem;width: 11rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+          >{{this.Description}}</p>
           <p class="m-0 p-0">Rs:{{this.Price}}</p>
-          <button onClick="addToCart('{{this._id}}')" class="btn btn-primary btn-rounded">Add to Cart</button>
-        </div>
+          <button
+            onClick="addToCart('{{this._id}}')"
+            class="btn btn-primary btn-rounded"
+          >Add to Cart</button>
+          <i class="bi bi-cart-plus"></i></div>
       </div>
     </div>
   {{/each}}
